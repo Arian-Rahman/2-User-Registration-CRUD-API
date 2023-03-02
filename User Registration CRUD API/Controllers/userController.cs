@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer;
 using System.Threading.Tasks;
 using User_Registration_CRUD_API.Data;
 using User_Registration_CRUD_API.Models;
@@ -71,16 +72,30 @@ namespace User_Registration_CRUD_API.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteAll()
         {
-            //var all= await _context.user.ToListAsync(); 
-            //_context.user.Remove(all);
-            //await _context.SaveChangesAsync();
+            var all= await _context.user.ToListAsync(); 
+            _context.user.RemoveRange(all);
+            await _context.SaveChangesAsync();
+            return NoContent();
+            
             //var Task = _context.user.FirstOrDefault(x => x.Id == id);
 
+
+
+            /*
             _context.Entry(user).State = EntityState.Deleted;
 
             _context.SaveChanges();
 
-            return NoContent();
+            _context.EntityState.Deleted();
+
+            */
+
+
+
+            /*var delUsers = _context.user.FromSql("DROP TABLE user");
+            _context.Database.ExecuteSql(`DROP TABLE user`);
+            return NoContent(); 
+            */
         }
     }
 }
